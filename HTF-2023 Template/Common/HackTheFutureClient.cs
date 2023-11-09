@@ -7,9 +7,9 @@ namespace Common;
 
 public class HackTheFutureClient : HttpClient
 {
-   
+
     public HackTheFutureClient()
-    { 
+    {
         BaseAddress = new Uri("https://app-involved-htf-api.azurewebsites.net");
     }
 
@@ -23,7 +23,7 @@ public class HackTheFutureClient : HttpClient
         DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 
-    public async Task StartGame(string path,string difficulty)
+    public async Task StartGame(string path, string difficulty)
     {
         var response = await GetAsync($"/api/path/{path}/{difficulty}/start");
         if (!response.IsSuccessStatusCode)
@@ -73,7 +73,7 @@ public class HackTheFutureClient : HttpClient
 
     public async Task<VineNavigationChallengeDto> GetVineDto(string path, string difficulty)
     {
-        var response = await GetAsync($"/api/path/{path}/{difficulty}/sample");
+        var response = await GetAsync($"/api/path/{path}/{difficulty}/puzzle");
 
         if (!response.IsSuccessStatusCode)
         {
@@ -89,4 +89,21 @@ public class HackTheFutureClient : HttpClient
         return content;
     }
 
+    public async Task<Animal[]> GetAnimals(string path, string difficulty)
+    {
+        var response = await GetAsync($"/api/path/{path}/{difficulty}/puzzle");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception($"Request not succeeded: {response.StatusCode}");
+        }
+
+        Animal[] content = await response.Content.ReadFromJsonAsync<Animal[]>();
+        if (content is null)
+        {
+            throw new InvalidOperationException("Received null content from API.");
+        }
+
+        return content;
+    }
 }
