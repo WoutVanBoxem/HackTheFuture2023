@@ -55,15 +55,28 @@ public class HackTheFutureClient : HttpClient
     }
 
 
-    public async Task<MayanCalendarChallengeDto> GetMayanCalendar(string path, string difficulty)
+    public async Task<MayanCalendarChallengeDto> GetPuzzle1b(string path, string difficulty)
     {
-        var response = await GetAsync($"/api/path/{path}/{difficulty}/sample");
+        var response = await GetAsync($"/api/path/{path}/{difficulty}/puzzle");
 
         if (!response.IsSuccessStatusCode)
         {
             throw new Exception($"Request not succeeded: {response.StatusCode}");
         }
         var content = await response.Content.ReadFromJsonAsync<MayanCalendarChallengeDto>();
+
+        return content;
+    }
+
+    public async Task<string[]> GetPuzzle2b(string path, string difficulty)
+    {
+        var response = await GetAsync($"/api/path/{path}/{difficulty}/puzzle");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception($"Request not succeeded: {response.StatusCode}");
+        }
+        var content = await response.Content.ReadFromJsonAsync<string[]>();
 
         return content;
     }
