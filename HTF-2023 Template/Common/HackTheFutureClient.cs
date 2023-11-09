@@ -119,4 +119,10 @@ public class HackTheFutureClient : HttpClient
 
         return content;
     }
+    public async Task StartBonus()
+    {
+        var response = await GetAsync($"/api/temple/bonus/start");
+        if (!response.IsSuccessStatusCode)
+            throw new Exception("Request not succeeded");
+    }
 }
